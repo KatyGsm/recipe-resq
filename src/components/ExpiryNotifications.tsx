@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, X, Bell } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { format, isToday, isPast } from "date-fns";
 
 interface UrgentProduct {
   id: string;
@@ -40,6 +41,15 @@ export const ExpiryNotifications = () => {
         !dismissed.includes(product.id)
       );
       
+      // Log today's date and comparison for debugging
+      const today = new Date();
+      console.log('Today is:', format(today, 'yyyy-MM-dd'));
+      console.log('Urgent products found:', urgent.map(p => ({
+        name: p.name,
+        expiry_date: p.expiry_date,
+        days_until_expiry: p.days_until_expiry
+      })));
+      
       setUrgentProducts(urgent);
 
       // Show toast notification for new urgent items
@@ -50,16 +60,18 @@ export const ExpiryNotifications = () => {
         if (todayItems.length > 0) {
           toast({
             title: "⚠️ Items Expiring Today!",
-            description: `${todayItems.length} product(s) expire today. Check your fridge!`,
+            description: `${todayItems.length} product(s) expire today: ${todayItems.map(p => p.name).join(', ')}`,
             variant: "destructive",
+            duration: 8000, // Show longer for urgent items
           });
         }
         
         if (expiredItems.length > 0) {
           toast({
             title: "🚨 Expired Items Detected!",
-            description: `${expiredItems.length} product(s) have expired. Please check them!`,
+            description: `${expiredItems.length} product(s) have expired: ${expiredItems.map(p => p.name).join(', ')}`,
             variant: "destructive",
+            duration: 10000, // Show even longer for expired items
           });
         }
       }
@@ -119,12 +131,13 @@ export const ExpiryNotifications = () => {
                   <p className="font-medium text-sm">{product.name}</p>
                   <p className="text-xs text-muted-foreground">
                     {product.days_until_expiry < 0 
-                      ? `Expired ${Math.abs(product.days_until_expiry)} days ago`
+                      ? `❌ Expired ${Math.abs(product.days_until_expiry)} day${Math.abs(product.days_until_expiry) !== 1 ? 's' : ''} ago`
                       : product.days_until_expiry === 0 
-                        ? 'Expires today!'
-                        : `Expires in ${product.days_until_expiry} day`
+                        ? '🚨 Expires TODAY!'
+                        : `⏰ Expires tomorrow`
                     }
-                    {product.location && ` • ${product.location}`}
+                    {product.location && ` • 📍 ${product.location}`}
+                    • {format(new Date(), 'HH:mm')} check
                   </p>
                 </div>
               </div>
