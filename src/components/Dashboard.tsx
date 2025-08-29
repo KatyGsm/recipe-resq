@@ -18,7 +18,6 @@ import {
   Beef
 } from "lucide-react";
 import { format } from "date-fns";
-import QuickActions from "./QuickActions";
 import InventoryCard from "./InventoryCard";
 import RecipeCard from "./RecipeCard";
 import RecipeModal from "./RecipeModal";
@@ -268,9 +267,6 @@ const Dashboard = () => {
 
               <GameStats />
             </div>
-
-            {/* Quick Actions */}
-            <QuickActions />
 
             {/* Smart Scanning Tools */}
             <div className="grid md:grid-cols-3 gap-6">
