@@ -246,7 +246,7 @@ const Dashboard = () => {
                 </div>
                 <div className="text-center">
                   <h2 className="text-xl font-bold text-pink-600 dark:text-pink-400 mb-2">
-                    🌹 中国情人节快乐！ 🌹
+                    🌹 七夕节快乐！ 🌹
                   </h2>
                   <p className="text-sm text-muted-foreground">
                     让智能厨房为您的浪漫夜晚增添甜蜜
