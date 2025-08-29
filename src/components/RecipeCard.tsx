@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Users, ChefHat, Star, Play } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 interface Recipe {
   id: number;
@@ -19,8 +18,6 @@ interface RecipeCardProps {
 }
 
 const RecipeCard = ({ recipe }: RecipeCardProps) => {
-  const navigate = useNavigate();
-  
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "Easy": return "text-green-400 border-green-400/50 bg-green-400/10";
@@ -31,10 +28,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
   };
 
   return (
-    <Card 
-      className="glass-card-hover group cursor-pointer" 
-      onClick={() => navigate(`/app/recipe/${recipe.id}`)}
-    >
+    <Card className="glass-card-hover group">
       <CardContent className="p-0">
         {/* Recipe Image/Emoji */}
         <div className="relative bg-gradient-card p-6 rounded-t-lg">
@@ -91,10 +85,6 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
             <Button 
               size="sm" 
               className="bg-gradient-primary hover:scale-105 transition-all duration-300 neon-glow"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/app/recipe/${recipe.id}`);
-              }}
             >
               <Play className="w-3 h-3 mr-1" />
               Cook

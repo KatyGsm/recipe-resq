@@ -1,59 +1,50 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Camera, ScanLine, Plus, ChefHat, ShoppingCart, Clock } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 const QuickActions = () => {
-  const navigate = useNavigate();
-  
   const actions = [
     {
       icon: Camera,
       title: "Scan Receipt",
       description: "Auto-add groceries to inventory",
       color: "bg-gradient-primary",
-      textColor: "text-primary-foreground",
-      path: "/app/scanner"
+      textColor: "text-primary-foreground"
     },
     {
       icon: ScanLine,
       title: "Check Expiry",
       description: "Scan food packaging dates",
       color: "bg-gradient-secondary",
-      textColor: "text-secondary-foreground",
-      path: "/app/scanner"
+      textColor: "text-secondary-foreground"
     },
     {
       icon: Plus,
       title: "Add Item",
       description: "Manually add to inventory",
       color: "bg-accent",
-      textColor: "text-accent-foreground",
-      path: "/app/inventory/new"
+      textColor: "text-accent-foreground"
     },
     {
       icon: ChefHat,
       title: "Find Recipes",
       description: "Cook with available ingredients",
       color: "bg-gradient-primary",
-      textColor: "text-primary-foreground",
-      path: "/app/recipes"
+      textColor: "text-primary-foreground"
     },
     {
       icon: ShoppingCart,
       title: "Smart List",
       description: "AI-powered grocery suggestions",
       color: "bg-muted",
-      textColor: "text-muted-foreground",
-      path: "/app/grocery-list"
+      textColor: "text-muted-foreground"
     },
     {
       icon: Clock,
       title: "Meal Planner",
       description: "Plan your weekly meals",
       color: "bg-gradient-secondary",
-      textColor: "text-secondary-foreground",
-      path: "/app/meal-planner"
+      textColor: "text-secondary-foreground"
     }
   ];
 
@@ -73,9 +64,8 @@ const QuickActions = () => {
               variant="outline"
               className={`
                 glass-card-hover h-auto p-4 flex-col gap-3 hover-lift
-                transition-all duration-300 group cursor-pointer
+                transition-all duration-300 group
               `}
-              onClick={() => navigate(action.path)}
             >
               <div className={`
                 w-12 h-12 rounded-lg flex items-center justify-center ${action.color}

@@ -3,7 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, AlertTriangle, CheckCircle } from "lucide-react";
 import { LucideIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 interface InventoryItem {
   id: number;
@@ -19,8 +18,6 @@ interface InventoryCardProps {
 }
 
 const InventoryCard = ({ item }: InventoryCardProps) => {
-  const navigate = useNavigate();
-  
   const getUrgencyColor = (days: number) => {
     if (days <= 1) return "text-destructive border-destructive/50 bg-destructive/10";
     if (days <= 3) return "text-yellow-400 border-yellow-400/50 bg-yellow-400/10";
@@ -36,10 +33,7 @@ const InventoryCard = ({ item }: InventoryCardProps) => {
   const UrgencyIcon = getUrgencyIcon(item.expiresIn);
 
   return (
-    <Card 
-      className={`glass-card-hover border cursor-pointer ${getUrgencyColor(item.expiresIn)}`}
-      onClick={() => navigate(`/app/inventory/${item.id}`)}
-    >
+    <Card className={`glass-card-hover border ${getUrgencyColor(item.expiresIn)}`}>
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
@@ -66,7 +60,6 @@ const InventoryCard = ({ item }: InventoryCardProps) => {
               size="sm" 
               variant="ghost" 
               className="h-6 px-2 text-xs hover:bg-primary/20 hover:text-primary"
-              onClick={(e) => e.stopPropagation()}
             >
               Use
             </Button>
@@ -74,10 +67,6 @@ const InventoryCard = ({ item }: InventoryCardProps) => {
               size="sm" 
               variant="ghost" 
               className="h-6 px-2 text-xs hover:bg-muted/50"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/app/inventory/${item.id}`);
-              }}
             >
               Edit
             </Button>
