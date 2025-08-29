@@ -27,6 +27,7 @@ import { RecentReceipts } from "./RecentReceipts";
 import { ProductUpload } from "./ProductUpload";
 import { ExpiringProducts } from "./ExpiringProducts";
 import { ExpiryNotifications } from "./ExpiryNotifications";
+import { FridgeScanner } from "./FridgeScanner";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -138,7 +139,7 @@ const Dashboard = () => {
             <QuickActions />
 
             {/* Smart Scanning Tools */}
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-3 gap-6">
               <Card className="glass-card">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -163,6 +164,20 @@ const Dashboard = () => {
                 <CardContent>
                   <ProductUpload onProductAdded={() => {
                     // Could refresh expiring products here
+                  }} />
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ChefHat className="w-5 h-5 text-accent" />
+                    Fridge Scanner
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <FridgeScanner onFridgeAnalyzed={() => {
+                    // Could refresh recipe suggestions here
                   }} />
                 </CardContent>
               </Card>
