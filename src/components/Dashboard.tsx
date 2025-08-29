@@ -21,6 +21,8 @@ import QuickActions from "./QuickActions";
 import InventoryCard from "./InventoryCard";
 import RecipeCard from "./RecipeCard";
 import GameStats from "./GameStats";
+import { ReceiptUpload } from "./ReceiptUpload";
+import { RecentReceipts } from "./RecentReceipts";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -121,6 +123,21 @@ const Dashboard = () => {
             {/* Quick Actions */}
             <QuickActions />
 
+            {/* Receipt Upload */}
+            <Card className="glass-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Camera className="w-5 h-5 text-primary" />
+                  Receipt Scanner
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ReceiptUpload onReceiptProcessed={() => {
+                  // Could refresh expiring items or inventory here
+                }} />
+              </CardContent>
+            </Card>
+
             {/* Expiring Soon */}
             <Card className="glass-card">
               <CardHeader>
@@ -164,6 +181,9 @@ const Dashboard = () => {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Recent Receipts */}
+            <RecentReceipts />
+
             {/* Grocery List Preview */}
             <Card className="glass-card">
               <CardHeader>
