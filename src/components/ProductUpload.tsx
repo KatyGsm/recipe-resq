@@ -222,9 +222,60 @@ export const ProductUpload = ({ onProductAdded }: ProductUploadProps) => {
 
         {processedData && (
           <div className="space-y-4">
-            <div className="flex items-center justify-center space-x-2 text-green-600">
-              <CheckCircle className="w-5 h-5" />
-              <span className="font-medium">Product Added!</span>
+            {/* Expiry Status Message in the style of the uploaded image */}
+            <div className="glass-card p-6 text-center space-y-3">
+              {(() => {
+                const daysUntilExpiry = processedData.days_until_expiry;
+                let statusIcon, statusMessage, statusSubtext, statusColor;
+                
+                if (daysUntilExpiry === null) {
+                  statusIcon = "✅";
+                  statusMessage = "Product Added!";
+                  statusSubtext = "Expiry date not detected. Check the product manually for best results.";
+                  statusColor = "text-muted-foreground";
+                } else if (daysUntilExpiry <= 0) {
+                  statusIcon = "🚨";
+                  statusMessage = "Expired Product!";
+                  statusSubtext = `${processedData.product_name} has already expired. Consider disposing of it safely.`;
+                  statusColor = "text-destructive";
+                } else if (daysUntilExpiry <= 1) {
+                  statusIcon = "⚠️";
+                  statusMessage = "Use Immediately!";
+                  statusSubtext = `${processedData.product_name} expires ${daysUntilExpiry === 1 ? 'tomorrow' : 'today'}. Use it right away!`;
+                  statusColor = "text-destructive";
+                } else if (daysUntilExpiry <= 3) {
+                  statusIcon = "🔔";
+                  statusMessage = "Use Soon!";
+                  statusSubtext = `${processedData.product_name} expires in ${daysUntilExpiry} days. Plan to use it this week.`;
+                  statusColor = "text-orange-500";
+                } else if (daysUntilExpiry <= 7) {
+                  statusIcon = "📅";
+                  statusMessage = "Good for This Week!";
+                  statusSubtext = `${processedData.product_name} expires in ${daysUntilExpiry} days. You have time to plan meals.`;
+                  statusColor = "text-yellow-500";
+                } else {
+                  statusIcon = "✅";
+                  statusMessage = "All Good!";
+                  statusSubtext = `${processedData.product_name} is fresh and expires in ${daysUntilExpiry} days. Perfect for meal planning!`;
+                  statusColor = "text-green-500";
+                }
+                
+                return (
+                  <>
+                    <div className="w-16 h-16 bg-card/50 rounded-full flex items-center justify-center mx-auto">
+                      <span className="text-2xl">{statusIcon}</span>
+                    </div>
+                    <div>
+                      <h3 className={`text-lg font-semibold ${statusColor}`}>
+                        {statusMessage} {statusIcon === "✅" && "🎉"}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mt-2">
+                        {statusSubtext}
+                      </p>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
             
             <div className="glass-card p-4 text-left">
