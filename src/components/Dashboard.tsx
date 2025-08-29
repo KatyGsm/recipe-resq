@@ -34,10 +34,72 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [selectedRecipe, setSelectedRecipe] = useState<any>(null);
   const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
+  const [fridgeRecipes, setFridgeRecipes] = useState<any[]>([]);
 
   const handleRecipeClick = (recipe: any) => {
     setSelectedRecipe(recipe);
     setIsRecipeModalOpen(true);
+  };
+
+  const handleFridgeAnalyzed = (analysisData: any) => {
+    console.log('Fridge analysis received:', analysisData);
+    
+    // Transform AI recipes to match our recipe format
+    if (analysisData.recipe_suggestions?.recipes) {
+      const transformedRecipes = analysisData.recipe_suggestions.recipes.map((aiRecipe: any, index: number) => ({
+        id: Date.now() + index, // Generate unique ID
+        title: aiRecipe.name,
+        time: parseInt(aiRecipe.prep_time) || 30,
+        difficulty: aiRecipe.difficulty === 'easy' ? 'Easy' : 
+                   aiRecipe.difficulty === 'medium' ? 'Medium' : 
+                   aiRecipe.difficulty === 'hard' ? 'Hard' : 'Medium',
+        ingredients: aiRecipe.ingredients_used?.length || 5,
+        image: getRecipeEmoji(aiRecipe.meal_type, aiRecipe.name),
+        tags: [
+          aiRecipe.meal_type ? aiRecipe.meal_type.charAt(0).toUpperCase() + aiRecipe.meal_type.slice(1) : 'Main',
+          'Fresh Ingredients'
+        ],
+        servings: 4,
+        description: aiRecipe.description || `A delicious ${aiRecipe.name} made with fresh ingredients from your fridge.`,
+        ingredientsList: [
+          ...(aiRecipe.ingredients_used || []),
+          ...(aiRecipe.missing_ingredients?.map((ing: string) => `${ing} (to buy)`) || [])
+        ],
+        instructions: aiRecipe.instructions || [
+          "Gather all your ingredients",
+          "Follow the preparation steps",
+          "Cook according to recipe instructions",
+          "Enjoy your meal!"
+        ]
+      }));
+      
+      setFridgeRecipes(transformedRecipes);
+    }
+  };
+
+  const getRecipeEmoji = (mealType: string, recipeName: string) => {
+    // Simple emoji mapping based on meal type or recipe name
+    const name = recipeName.toLowerCase();
+    const type = mealType?.toLowerCase();
+    
+    if (name.includes('soup')) return '🍲';
+    if (name.includes('salad')) return '🥗';
+    if (name.includes('pasta')) return '🍝';
+    if (name.includes('rice')) return '🍚';
+    if (name.includes('sandwich')) return '🥪';
+    if (name.includes('smoothie')) return '🥤';
+    if (name.includes('pancake')) return '🥞';
+    if (name.includes('taco')) return '🌮';
+    if (name.includes('pizza')) return '🍕';
+    if (name.includes('burger')) return '🍔';
+    
+    if (type === 'breakfast') return '🍳';
+    if (type === 'lunch') return '🍽️';
+    if (type === 'dinner') return '🍖';
+    if (type === 'snack') return '🍿';
+    if (type === 'dessert') return '🍰';
+    
+    return '🍽️'; // Default
   };
 
   // Mock data for demo
@@ -133,6 +195,9 @@ const Dashboard = () => {
       ]
     }
   ];
+
+  // Combine default recipes with fridge-generated recipes
+  const allRecipes = [...fridgeRecipes, ...suggestedRecipes];
 
   return (
     <div className="min-h-screen bg-background">
@@ -241,9 +306,7 @@ const Dashboard = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <FridgeScanner onFridgeAnalyzed={() => {
-                    // Could refresh recipe suggestions here
-                  }} />
+                  <FridgeScanner onFridgeAnalyzed={handleFridgeAnalyzed} />
                 </CardContent>
               </Card>
             </div>
@@ -258,19 +321,25 @@ const Dashboard = () => {
                   <ChefHat className="w-5 h-5 text-primary" />
                   Suggested Recipes
                   <Badge variant="secondary" className="ml-auto">
-                    Based on your fridge
+                    {fridgeRecipes.length > 0 ? 'From your fridge' : 'Based on your fridge'}
                   </Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-3 gap-4">
-                  {suggestedRecipes.map((recipe) => (
+                  {allRecipes.map((recipe) => (
                     <RecipeCard 
                       key={recipe.id} 
                       recipe={recipe} 
                       onClick={() => handleRecipeClick(recipe)}
                     />
                   ))}
+                  {allRecipes.length === 0 && (
+                    <div className="col-span-3 text-center py-8 text-muted-foreground">
+                      <ChefHat className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                      <p>Take a photo of your fridge to get personalized recipe suggestions!</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
