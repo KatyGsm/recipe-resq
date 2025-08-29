@@ -205,8 +205,12 @@ const Dashboard = () => {
       <header className="glass-card border-b border-border/50 px-4 py-3 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center neon-glow">
-              <ChefHat className="w-6 h-6 text-primary-foreground" />
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden bg-white/10">
+              <img 
+                src="/lovable-uploads/c1e0551d-2e68-45a7-8093-98774b3a7104.png" 
+                alt="Schwarz Group Logo" 
+                className="w-full h-full object-contain"
+              />
             </div>
             <div>
               <h1 className="text-xl font-bold text-gradient-primary">SCHWARZ SMART KITCHEN</h1>
