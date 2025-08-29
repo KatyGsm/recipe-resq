@@ -122,11 +122,17 @@ serve(async (req) => {
 
     const categoryMap = new Map(categories?.map(cat => [cat.name, cat.id]) || []);
 
-    // Upload image to storage
+    // Upload image to storage (convert base64 to Uint8Array for Deno)
     const fileName = `${userId}/${Date.now()}.jpg`;
+    const binaryString = atob(imageBase64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('fridge-photos')
-      .upload(fileName, Buffer.from(imageBase64, 'base64'), {
+      .upload(fileName, bytes, {
         contentType: 'image/jpeg'
       });
 
