@@ -79,7 +79,7 @@ const Dashboard = () => {
               <ChefHat className="w-6 h-6 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gradient-primary">FRIDGE CHEF</h1>
+              <h1 className="text-xl font-bold text-gradient-primary">SCHWARZ SMART KITCHEN</h1>
               <p className="text-sm text-muted-foreground">Smart Cooking Assistant</p>
             </div>
           </div>

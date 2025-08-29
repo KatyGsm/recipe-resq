@@ -38,8 +38,8 @@ const Index = () => {
             </Badge>
             
             <h1 className="text-6xl md:text-8xl font-bold mb-6">
-              <span className="text-gradient-primary">FRIDGE</span>{" "}
-              <span className="text-gradient-secondary">CHEF</span>
+              <span className="text-gradient-primary">SCHWARZ</span>{" "}
+              <span className="text-gradient-secondary">SMART KITCHEN</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
