@@ -217,12 +217,6 @@ const Dashboard = () => {
           </div>
           
           <div className="flex items-center gap-3">
-            {/* Valentine's Day Celebration */}
-            <div className="glass-card px-3 py-2 flex items-center gap-2 animate-pulse">
-              <span className="text-lg">💕</span>
-              <span className="text-xs font-medium text-muted-foreground">Happy Valentine's Day!</span>
-            </div>
-            
             {/* Current Date Display */}
             <div className="glass-card px-3 py-2 text-sm font-medium text-foreground">
               {format(new Date(), "EEEE, MMMM do, yyyy")}
