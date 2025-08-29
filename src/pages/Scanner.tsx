@@ -1,12 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Camera, Upload, Scan } from "lucide-react";
+import { ArrowLeft, Camera, Upload, Scan, Image as ImageIcon, FileImage } from "lucide-react";
 import { useState } from "react";
+import { useCamera, ScanType } from "@/hooks/useCamera";
+import { useFileUpload } from "@/hooks/useFileUpload";
 
 const Scanner = () => {
   const navigate = useNavigate();
-  const [scanType, setScanType] = useState<'receipt' | 'expiry' | 'fridge' | null>(null);
+  const [scanType, setScanType] = useState<ScanType | null>(null);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const { takePicture, selectFromGallery, uploadImage, isLoading: cameraLoading } = useCamera();
+  const { uploadFile, handleFileSelect, isLoading: fileLoading } = useFileUpload();
+  
+  const isLoading = cameraLoading || fileLoading;
 
   const scanOptions = [
     {
@@ -35,10 +43,63 @@ const Scanner = () => {
     }
   ];
 
-  const handleScanSelect = (type: 'receipt' | 'expiry' | 'fridge') => {
+  const handleScanSelect = (type: ScanType) => {
     setScanType(type);
-    // In a real app, this would open the camera
-    console.log(`Opening camera for ${type} scan`);
+    setCapturedImage(null);
+    setUploadedImageUrl(null);
+  };
+
+  const handleTakePicture = async () => {
+    if (!scanType) return;
+    
+    const result = await takePicture(scanType);
+    if (result && result.base64String) {
+      setCapturedImage(`data:image/jpeg;base64,${result.base64String}`);
+    }
+  };
+
+  const handleSelectFromGallery = async () => {
+    if (!scanType) return;
+    
+    const result = await selectFromGallery(scanType);
+    if (result && result.base64String) {
+      setCapturedImage(`data:image/jpeg;base64,${result.base64String}`);
+    }
+  };
+
+  const handleUploadImage = async () => {
+    if (!capturedImage || !scanType) return;
+    
+    const base64String = capturedImage.split(',')[1];
+    const url = await uploadImage(base64String, scanType);
+    if (url) {
+      setUploadedImageUrl(url);
+    }
+  };
+
+  const handleSelectFile = async () => {
+    if (!scanType) return;
+    
+    const file = await handleFileSelect(scanType);
+    if (file) {
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setCapturedImage(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+      
+      // Upload file directly
+      const url = await uploadFile(file, scanType);
+      if (url) {
+        setUploadedImageUrl(url);
+      }
+    }
+  };
+
+  const handleRetake = () => {
+    setCapturedImage(null);
+    setUploadedImageUrl(null);
   };
 
   return (
@@ -123,20 +184,37 @@ const Scanner = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Camera Interface Placeholder */}
+            {/* Camera Interface */}
             <Card className="glass-card">
               <CardContent className="p-8 text-center">
-                <div className="w-full h-64 bg-muted rounded-lg flex items-center justify-center mb-6">
-                  <div className="text-center">
-                    <Camera className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-lg font-medium">Camera would open here</p>
-                    <p className="text-sm text-muted-foreground">
-                      In a real app, this would show the camera feed
-                    </p>
+                {!capturedImage ? (
+                  <div className="w-full h-64 bg-muted rounded-lg flex items-center justify-center mb-6">
+                    <div className="text-center">
+                      <Camera className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-lg font-medium">Ready to capture</p>
+                      <p className="text-sm text-muted-foreground">
+                        Take a photo or select from your gallery
+                      </p>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="w-full h-64 mb-6 relative">
+                    <img 
+                      src={capturedImage} 
+                      alt="Captured" 
+                      className="w-full h-full object-contain rounded-lg border"
+                    />
+                    {uploadedImageUrl && (
+                      <div className="absolute top-2 right-2">
+                        <div className="bg-green-500 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                          ✓ Uploaded
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
                 
-                <div className="flex justify-center gap-4">
+                <div className="flex justify-center gap-4 flex-wrap">
                   <Button 
                     variant="outline" 
                     onClick={() => setScanType(null)}
@@ -144,10 +222,67 @@ const Scanner = () => {
                   >
                     Back to Options
                   </Button>
-                  <Button className="bg-gradient-primary neon-glow">
-                    <Camera className="w-4 h-4 mr-2" />
-                    Take Photo
-                  </Button>
+                  
+                  {!capturedImage ? (
+                    <>
+                      <Button 
+                        onClick={handleTakePicture}
+                        className="bg-gradient-primary neon-glow"
+                        disabled={isLoading}
+                      >
+                        <Camera className="w-4 h-4 mr-2" />
+                        {isLoading ? 'Opening Camera...' : 'Take Photo'}
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        onClick={handleSelectFromGallery}
+                        className="hover-glow"
+                        disabled={isLoading}
+                      >
+                        <ImageIcon className="w-4 h-4 mr-2" />
+                        From Gallery
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        onClick={handleSelectFile}
+                        className="hover-glow"
+                        disabled={isLoading}
+                      >
+                        <FileImage className="w-4 h-4 mr-2" />
+                        Upload File
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button 
+                        variant="outline"
+                        onClick={handleRetake}
+                        className="hover-glow"
+                      >
+                        Retake
+                      </Button>
+                      {!uploadedImageUrl ? (
+                        <Button 
+                          onClick={handleUploadImage}
+                          className="bg-gradient-primary neon-glow"
+                          disabled={isLoading}
+                        >
+                          <Upload className="w-4 h-4 mr-2" />
+                          {isLoading ? 'Uploading...' : 'Upload & Process'}
+                        </Button>
+                      ) : (
+                        <Button 
+                          className="bg-green-500 hover:bg-green-600"
+                          onClick={() => {
+                            // Process the uploaded image here
+                            console.log('Processing image:', uploadedImageUrl);
+                          }}
+                        >
+                          ✓ Continue Processing
+                        </Button>
+                      )}
+                    </>
+                  )}
                 </div>
               </CardContent>
             </Card>
