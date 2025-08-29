@@ -17,6 +17,7 @@ import {
   Milk,
   Beef
 } from "lucide-react";
+import { format } from "date-fns";
 import QuickActions from "./QuickActions";
 import InventoryCard from "./InventoryCard";
 import RecipeCard from "./RecipeCard";
@@ -83,6 +84,11 @@ const Dashboard = () => {
           </div>
           
           <div className="flex items-center gap-3">
+            {/* Current Date Display */}
+            <div className="glass-card px-3 py-2 text-sm font-medium text-foreground">
+              {format(new Date(), "EEEE, MMMM do, yyyy")}
+            </div>
+            
             <Button variant="ghost" size="sm" className="hover-glow">
               <Bell className="w-5 h-5" />
             </Button>

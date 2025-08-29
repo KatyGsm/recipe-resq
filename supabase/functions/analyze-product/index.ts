@@ -159,6 +159,17 @@ serve(async (req) => {
 
     console.log('Product saved with ID:', product.id);
 
+    // Calculate days until expiry more accurately
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate comparison
+    
+    let daysUntilExpiry = null;
+    if (productData.expiry_date) {
+      const expiryDate = new Date(productData.expiry_date);
+      expiryDate.setHours(0, 0, 0, 0); // Reset time to start of day
+      daysUntilExpiry = Math.ceil((expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
     return new Response(JSON.stringify({
       success: true,
       product_id: product.id,
@@ -167,9 +178,8 @@ serve(async (req) => {
       expiry_date: productData.expiry_date,
       category: productData.category,
       confidence: productData.confidence,
-      days_until_expiry: productData.expiry_date 
-        ? Math.ceil((new Date(productData.expiry_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
-        : null
+      days_until_expiry: daysUntilExpiry,
+      today_date: today.toISOString().split('T')[0] // Include today's date for reference
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
