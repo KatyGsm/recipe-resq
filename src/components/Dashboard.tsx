@@ -23,6 +23,9 @@ import RecipeCard from "./RecipeCard";
 import GameStats from "./GameStats";
 import { ReceiptUpload } from "./ReceiptUpload";
 import { RecentReceipts } from "./RecentReceipts";
+import { ProductUpload } from "./ProductUpload";
+import { ExpiringProducts } from "./ExpiringProducts";
+import { ExpiryNotifications } from "./ExpiryNotifications";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -91,6 +94,11 @@ const Dashboard = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Urgent Expiry Notifications */}
+        <div className="mb-6">
+          <ExpiryNotifications />
+        </div>
+        
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Main Content Area */}
           <div className="lg:col-span-3 space-y-6">
@@ -123,40 +131,39 @@ const Dashboard = () => {
             {/* Quick Actions */}
             <QuickActions />
 
-            {/* Receipt Upload */}
-            <Card className="glass-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Camera className="w-5 h-5 text-primary" />
-                  Receipt Scanner
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ReceiptUpload onReceiptProcessed={() => {
-                  // Could refresh expiring items or inventory here
-                }} />
-              </CardContent>
-            </Card>
+            {/* Smart Scanning Tools */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Camera className="w-5 h-5 text-primary" />
+                    Receipt Scanner
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ReceiptUpload onReceiptProcessed={() => {
+                    // Could refresh expiring items or inventory here
+                  }} />
+                </CardContent>
+              </Card>
 
-            {/* Expiring Soon */}
-            <Card className="glass-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-destructive" />
-                  Expiring Soon
-                  <Badge variant="destructive" className="ml-auto">
-                    {expiringItems.length} items
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-3 gap-4">
-                  {expiringItems.map((item) => (
-                    <InventoryCard key={item.id} item={item} />
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Camera className="w-5 h-5 text-secondary" />
+                    Product Scanner
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ProductUpload onProductAdded={() => {
+                    // Could refresh expiring products here
+                  }} />
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Expiring Products */}
+            <ExpiringProducts />
 
             {/* Suggested Recipes */}
             <Card className="glass-card">

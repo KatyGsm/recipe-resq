@@ -35,6 +35,77 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          barcode: string | null
+          brand: string | null
+          category_id: string | null
+          consumed_at: string | null
+          created_at: string
+          expiry_date: string | null
+          id: string
+          image_path: string | null
+          is_consumed: boolean | null
+          location: string | null
+          name: string
+          notes: string | null
+          purchase_date: string | null
+          quantity: number | null
+          raw_ocr_text: string | null
+          unit: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          barcode?: string | null
+          brand?: string | null
+          category_id?: string | null
+          consumed_at?: string | null
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          image_path?: string | null
+          is_consumed?: boolean | null
+          location?: string | null
+          name: string
+          notes?: string | null
+          purchase_date?: string | null
+          quantity?: number | null
+          raw_ocr_text?: string | null
+          unit?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          barcode?: string | null
+          brand?: string | null
+          category_id?: string | null
+          consumed_at?: string | null
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          image_path?: string | null
+          is_consumed?: boolean | null
+          location?: string | null
+          name?: string
+          notes?: string | null
+          purchase_date?: string | null
+          quantity?: number | null
+          raw_ocr_text?: string | null
+          unit?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       receipt_items: {
         Row: {
           created_at: string
@@ -130,7 +201,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_expiring_products: {
+        Args: { days_ahead?: number }
+        Returns: {
+          category_name: string
+          days_until_expiry: number
+          expiry_date: string
+          id: string
+          image_path: string
+          location: string
+          name: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
