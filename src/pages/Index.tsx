@@ -4,12 +4,20 @@ import { Badge } from "@/components/ui/badge";
 import { Sparkles, Camera, Clock, Users, ChefHat, TrendingDown } from "lucide-react";
 import heroImage from "@/assets/hero-kitchen.jpg";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 const Index = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
+      {/* Date Display */}
+      <div className="absolute top-6 right-6 z-20">
+        <div className="glass-card px-4 py-2 text-sm font-medium text-foreground">
+          {format(new Date(), "EEEE, MMMM do, yyyy")}
+        </div>
+      </div>
+      
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4">
         {/* Background Image with Overlay */}
