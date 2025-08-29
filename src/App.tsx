@@ -7,6 +7,10 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Dashboard from "@/components/Dashboard";
 import Auth from "./pages/Auth";
+import RecipeDetail from "./pages/RecipeDetail";
+import GroceryList from "./pages/GroceryList";
+import InventoryDetail from "./pages/InventoryDetail";
+import Scanner from "./pages/Scanner";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -27,6 +31,38 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/recipe/:id"
+              element={
+                <ProtectedRoute>
+                  <RecipeDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/inventory/:id"
+              element={
+                <ProtectedRoute>
+                  <InventoryDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/grocery-list"
+              element={
+                <ProtectedRoute>
+                  <GroceryList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/scanner"
+              element={
+                <ProtectedRoute>
+                  <Scanner />
                 </ProtectedRoute>
               }
             />

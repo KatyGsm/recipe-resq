@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { useNavigate } from "react-router-dom";
 import { 
   Camera, 
   Clock, 
@@ -23,6 +24,7 @@ import RecipeCard from "./RecipeCard";
 import GameStats from "./GameStats";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("dashboard");
 
   // Mock data for demo
@@ -187,7 +189,11 @@ const Dashboard = () => {
                     <Badge variant="outline" className="text-xs">Low stock</Badge>
                   </div>
                 </div>
-                <Button variant="outline" className="w-full mt-4 hover-glow">
+                <Button 
+                  variant="outline" 
+                  className="w-full mt-4 hover-glow"
+                  onClick={() => navigate('/app/grocery-list')}
+                >
                   View Full List
                 </Button>
               </CardContent>
