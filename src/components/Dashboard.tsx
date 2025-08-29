@@ -23,7 +23,6 @@ import RecipeCard from "./RecipeCard";
 import RecipeModal from "./RecipeModal";
 import GameStats from "./GameStats";
 import { ReceiptUpload } from "./ReceiptUpload";
-import { RecentReceipts } from "./RecentReceipts";
 import { ProductUpload } from "./ProductUpload";
 import { ExpiringProducts } from "./ExpiringProducts";
 import { ExpiryNotifications } from "./ExpiryNotifications";
@@ -347,9 +346,6 @@ const Dashboard = () => {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Recent Receipts */}
-            <RecentReceipts />
-
             {/* Grocery List Preview */}
             <Card className="glass-card">
               <CardHeader>
