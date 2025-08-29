@@ -233,6 +233,41 @@ const Dashboard = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Valentine's Day Celebration */}
+        <div className="mb-6">
+          <Card className="glass-card border-pink-500/30 bg-gradient-to-r from-pink-500/10 to-red-500/10 overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-red-500/5 animate-pulse"></div>
+            <CardContent className="relative p-6">
+              <div className="flex items-center justify-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl animate-bounce">💕</span>
+                  <span className="text-2xl animate-pulse">❤️</span>
+                  <span className="text-2xl animate-bounce delay-100">💕</span>
+                </div>
+                <div className="text-center">
+                  <h2 className="text-xl font-bold text-pink-600 dark:text-pink-400 mb-2">
+                    🌹 中国情人节快乐！ 🌹
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    让智能厨房为您的浪漫夜晚增添甜蜜
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl animate-bounce delay-200">💕</span>
+                  <span className="text-2xl animate-pulse delay-100">❤️</span>
+                  <span className="text-2xl animate-bounce delay-300">💕</span>
+                </div>
+              </div>
+              
+              {/* Floating hearts animation */}
+              <div className="absolute top-2 left-1/4 text-pink-400 animate-bounce">💖</div>
+              <div className="absolute top-4 right-1/3 text-red-400 animate-pulse delay-200">💘</div>
+              <div className="absolute bottom-2 left-1/3 text-pink-500 animate-bounce delay-500">💝</div>
+              <div className="absolute bottom-4 right-1/4 text-red-500 animate-pulse delay-700">💗</div>
+            </CardContent>
+          </Card>
+        </div>
+        
         {/* Urgent Expiry Notifications */}
         <div className="mb-6">
           <ExpiryNotifications />
