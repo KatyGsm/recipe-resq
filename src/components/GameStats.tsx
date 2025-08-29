@@ -2,8 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Zap, Flame, Trophy, Target, TrendingUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const GameStats = () => {
+  const navigate = useNavigate();
   const currentXP = 1250;
   const nextLevelXP = 1500;
   const progressPercent = (currentXP / nextLevelXP) * 100;
@@ -42,8 +44,11 @@ const GameStats = () => {
               <div className="text-xs text-muted-foreground">Eco Chef</div>
             </div>
           </div>
-          <Badge className="bg-accent/20 text-accent border-accent/50">
-            {currentXP} XP
+          <Badge 
+            className="bg-accent/20 text-accent border-accent/50 hover:bg-accent/30 cursor-pointer transition-all duration-200 hover:scale-105"
+            onClick={() => navigate('/rewards')}
+          >
+            {currentXP} XP ✨
           </Badge>
         </div>
 
