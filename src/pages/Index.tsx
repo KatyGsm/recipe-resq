@@ -1,17 +1,12 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Camera, Clock, Users, ChefHat, TrendingDown } from "lucide-react";
 import heroImage from "@/assets/hero-kitchen.jpg";
-import Dashboard from "@/components/Dashboard";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
-  const [showApp, setShowApp] = useState(false);
-
-  if (showApp) {
-    return <Dashboard />;
-  }
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
@@ -77,7 +72,7 @@ const Index = () => {
             <Button 
               size="lg" 
               className="bg-gradient-primary hover:scale-105 transition-all duration-300 neon-glow px-8 py-4 text-lg font-semibold"
-              onClick={() => setShowApp(true)}
+              onClick={() => navigate("/app")}
             >
               <Sparkles className="w-5 h-5 mr-2" />
               Start Cooking Smart
@@ -87,9 +82,10 @@ const Index = () => {
               variant="outline" 
               size="lg"
               className="glass-card hover-glow px-8 py-4 text-lg"
+              onClick={() => navigate("/auth")}
             >
-              <TrendingDown className="w-5 h-5 mr-2" />
-              Reduce Food Waste
+              <Users className="w-5 h-5 mr-2" />
+              Sign in / Sign up
             </Button>
           </div>
 
