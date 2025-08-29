@@ -11,13 +11,18 @@ interface Recipe {
   ingredients: number;
   image: string;
   tags: string[];
+  instructions?: string[];
+  ingredientsList?: string[];
+  servings?: number;
+  description?: string;
 }
 
 interface RecipeCardProps {
   recipe: Recipe;
+  onClick?: () => void;
 }
 
-const RecipeCard = ({ recipe }: RecipeCardProps) => {
+const RecipeCard = ({ recipe, onClick }: RecipeCardProps) => {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "Easy": return "text-green-400 border-green-400/50 bg-green-400/10";
@@ -28,7 +33,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
   };
 
   return (
-    <Card className="glass-card-hover group">
+    <Card className="glass-card-hover group cursor-pointer" onClick={onClick}>
       <CardContent className="p-0">
         {/* Recipe Image/Emoji */}
         <div className="relative bg-gradient-card p-6 rounded-t-lg">
@@ -85,6 +90,10 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
             <Button 
               size="sm" 
               className="bg-gradient-primary hover:scale-105 transition-all duration-300 neon-glow"
+              onClick={(e) => {
+                e.stopPropagation();
+                onClick?.();
+              }}
             >
               <Play className="w-3 h-3 mr-1" />
               Cook

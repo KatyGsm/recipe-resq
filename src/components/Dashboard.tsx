@@ -21,6 +21,7 @@ import { format } from "date-fns";
 import QuickActions from "./QuickActions";
 import InventoryCard from "./InventoryCard";
 import RecipeCard from "./RecipeCard";
+import RecipeModal from "./RecipeModal";
 import GameStats from "./GameStats";
 import { ReceiptUpload } from "./ReceiptUpload";
 import { RecentReceipts } from "./RecentReceipts";
@@ -31,6 +32,13 @@ import { FridgeScanner } from "./FridgeScanner";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [selectedRecipe, setSelectedRecipe] = useState<any>(null);
+  const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
+
+  const handleRecipeClick = (recipe: any) => {
+    setSelectedRecipe(recipe);
+    setIsRecipeModalOpen(true);
+  };
 
   // Mock data for demo
   const expiringItems = [
@@ -47,7 +55,24 @@ const Dashboard = () => {
       difficulty: "Easy",
       ingredients: 4,
       image: "🥣",
-      tags: ["Breakfast", "Healthy"]
+      tags: ["Breakfast", "Healthy"],
+      servings: 2,
+      description: "A nutritious and delicious smoothie bowl packed with fresh bananas, perfect for a healthy breakfast or snack.",
+      ingredientsList: [
+        "2 ripe bananas, frozen",
+        "1/2 cup milk of choice",
+        "1 tbsp honey or maple syrup",
+        "1/4 cup granola for topping",
+        "Fresh berries for topping",
+        "Chia seeds (optional)"
+      ],
+      instructions: [
+        "Add frozen bananas and milk to a blender.",
+        "Blend until smooth and creamy, adding more milk if needed.",
+        "Pour the smoothie into a bowl.",
+        "Top with granola, fresh berries, and chia seeds.",
+        "Serve immediately and enjoy your healthy breakfast!"
+      ]
     },
     {
       id: 2,
@@ -56,7 +81,27 @@ const Dashboard = () => {
       difficulty: "Medium",
       ingredients: 6,
       image: "🌮",
-      tags: ["Dinner", "Mexican"]
+      tags: ["Dinner", "Mexican"],
+      servings: 4,
+      description: "Flavorful beef tacos with seasoned ground beef, fresh vegetables, and all your favorite toppings.",
+      ingredientsList: [
+        "1 lb ground beef",
+        "1 packet taco seasoning",
+        "8 taco shells",
+        "1 cup shredded lettuce",
+        "1 cup diced tomatoes",
+        "1 cup shredded cheese",
+        "Sour cream and salsa for serving"
+      ],
+      instructions: [
+        "Heat a large skillet over medium-high heat.",
+        "Add ground beef and cook, breaking it apart, until browned (about 5-7 minutes).",
+        "Drain excess fat and add taco seasoning with 1/4 cup water.",
+        "Simmer for 2-3 minutes until sauce thickens.",
+        "Warm taco shells according to package directions.",
+        "Fill shells with beef mixture and top with lettuce, tomatoes, and cheese.",
+        "Serve with sour cream and salsa on the side."
+      ]
     },
     {
       id: 3,
@@ -65,7 +110,27 @@ const Dashboard = () => {
       difficulty: "Easy",
       ingredients: 5,
       image: "🥞",
-      tags: ["Breakfast", "Sweet"]
+      tags: ["Breakfast", "Sweet"],
+      servings: 3,
+      description: "Fluffy, golden pancakes made with fresh milk for the perfect weekend breakfast treat.",
+      ingredientsList: [
+        "1 cup all-purpose flour",
+        "1 cup milk",
+        "1 large egg",
+        "2 tbsp sugar",
+        "2 tsp baking powder",
+        "1/2 tsp salt",
+        "2 tbsp butter, melted"
+      ],
+      instructions: [
+        "In a large bowl, whisk together flour, sugar, baking powder, and salt.",
+        "In another bowl, combine milk, egg, and melted butter.",
+        "Pour wet ingredients into dry ingredients and stir until just combined (don't overmix).",
+        "Heat a griddle or large skillet over medium heat and lightly grease.",
+        "Pour 1/4 cup batter for each pancake onto the griddle.",
+        "Cook until bubbles form on surface, then flip and cook until golden brown.",
+        "Serve hot with butter and maple syrup."
+      ]
     }
   ];
 
@@ -200,7 +265,11 @@ const Dashboard = () => {
               <CardContent>
                 <div className="grid md:grid-cols-3 gap-4">
                   {suggestedRecipes.map((recipe) => (
-                    <RecipeCard key={recipe.id} recipe={recipe} />
+                    <RecipeCard 
+                      key={recipe.id} 
+                      recipe={recipe} 
+                      onClick={() => handleRecipeClick(recipe)}
+                    />
                   ))}
                 </div>
               </CardContent>
@@ -291,6 +360,13 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      
+      {/* Recipe Modal */}
+      <RecipeModal
+        recipe={selectedRecipe}
+        isOpen={isRecipeModalOpen}
+        onClose={() => setIsRecipeModalOpen(false)}
+      />
     </div>
   );
 };
